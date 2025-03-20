@@ -168,3 +168,111 @@ Content-Type: application/json
   }
 }
 ```
+
+---
+
+## Endpoint: `/users/profile`
+
+### Description
+This endpoint is used to retrieve the profile of the authenticated user. The user must be logged in and provide a valid JWT token.
+
+### Method
+`GET`
+
+### Headers
+| Header            | Type   | Required | Description                              |
+|-------------------|--------|----------|------------------------------------------|
+| `Authorization`   | String | Yes      | A valid JWT token in the format `Bearer <token>`. |
+
+### Response
+```json
+{
+    "fullname": {
+        "firstname": "John",
+    "lastname": "Doe"
+  },
+  "_id": "64f1c2e4b5d6c2a1b8e4f123",
+  "email": "johndoe@example.com"
+}
+```
+
+#### Success (200 OK)
+```json
+{
+  "_id": "USER_ID",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "johndoe@example.com"
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Example Request
+```bash
+GET /users/profile HTTP/1.1
+Authorization: Bearer JWT_TOKEN
+```
+
+### Example Response
+```json
+{
+  "_id": "64f1c2e4b5d6c2a1b8e4f123",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "johndoe@example.com"
+}
+```
+
+---
+
+## Endpoint: `/users/logout`
+
+### Description
+This endpoint is used to log out the authenticated user. It clears the JWT token from cookies and blacklists the token to prevent reuse.
+
+### Method
+`GET`
+
+### Headers
+| Header            | Type   | Required | Description                              |
+|-------------------|--------|----------|------------------------------------------|
+| `Authorization`   | String | Yes      | A valid JWT token in the format `Bearer <token>`. |
+
+
+
+#### Success (200 OK)
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Example Request
+```bash
+GET /users/logout HTTP/1.1
+Authorization: Bearer JWT_TOKEN
+```
+
+### Example Response
+```json
+{
+  "message": "Logged out successfully"
+}
+```
