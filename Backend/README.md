@@ -83,3 +83,88 @@ Content-Type: application/json
   }
 }
 ```
+
+---
+
+## Endpoint: `/users/login`
+
+### Description
+This endpoint is used to authenticate a user. It validates the input data, checks the email and password, and returns a JSON Web Token (JWT) if the credentials are valid.
+
+### Method
+`POST`
+
+### Request Body
+The request body must be in JSON format and include the following fields:
+
+| Field      | Type   | Required | Description                              |
+|------------|--------|----------|------------------------------------------|
+| `email`    | String | Yes      | A valid email address.                   |
+| `password` | String | Yes      | A password with at least 6 characters.   |
+
+### Validation Rules
+- `email`: Must be a valid email address.
+- `password`: Must be at least 6 characters long.
+
+### Response
+
+#### Success (200 OK)
+```json
+{
+  "token": "JWT_TOKEN",
+  "user": {
+    "_id": "USER_ID",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com"
+  }
+}
+```
+
+#### Error (400 Bad Request)
+```json
+{
+  "errors": [
+    {
+      "msg": "Error message describing the validation issue",
+      "param": "field_name",
+      "location": "body"
+    }
+  ]
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+### Example Request
+```bash
+POST /users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "johndoe@example.com",
+  "password": "password123"
+}
+```
+
+### Example Response
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "_id": "64f1c2e4b5d6c2a1b8e4f123",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com"
+  }
+}
+```
