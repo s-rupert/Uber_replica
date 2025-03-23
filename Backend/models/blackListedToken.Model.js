@@ -4,7 +4,7 @@ const blacklistedTokenSchema = new mongoose.Schema({
     token: {
         type: String,
         required: true,
-        Unique: true
+        unique: true  // Corrected 'Unique' to 'unique'
     },
     createdAt: {
         type: Date,
@@ -13,4 +13,7 @@ const blacklistedTokenSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('BlackListToken', blacklistedTokenSchema);
+// Use blacklistedTokenSchema for the model
+const BlackListToken = mongoose.models.BlackListToken || mongoose.model('BlackListToken', blacklistedTokenSchema);
+
+module.exports = BlackListToken;
