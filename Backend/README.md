@@ -388,3 +388,210 @@ Content-Type: application/json
   }
 }
 ```
+
+---
+
+## Endpoint: `/captains/login`
+
+### Description
+This endpoint is used to authenticate a captain. It validates the input data, checks the email and password, and returns a JSON Web Token (JWT) if the credentials are valid.
+
+### Method
+`POST`
+
+### Request Body
+The request body must be in JSON format and include the following fields:
+
+| Field      | Type   | Required | Description                              |
+|------------|--------|----------|------------------------------------------|
+| `email`    | String | Yes      | A valid email address.                   |
+| `password` | String | Yes      | A password with at least 6 characters.   |
+
+### Validation Rules
+- `email`: Must be a valid email address.
+- `password`: Must be at least 6 characters long.
+
+### Response
+
+#### Success (200 OK)
+```json
+{
+  "token": "JWT_TOKEN",
+  "captain": {
+    "_id": "CAPTAIN_ID",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+#### Error (400 Bad Request)
+```json
+{
+  "errors": [
+    {
+      "msg": "Error message describing the validation issue",
+      "param": "field_name",
+      "location": "body"
+    }
+  ]
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+### Example Request
+```bash
+POST /captains/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "johndoe@example.com",
+  "password": "password123"
+}
+```
+
+### Example Response
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "_id": "64f1c2e4b5d6c2a1b8e4f123",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+## Endpoint: `/captains/profile`
+
+### Description
+This endpoint is used to retrieve the profile of the authenticated captain. The captain must be logged in and provide a valid JWT token.
+
+### Method
+`GET`
+
+### Headers
+| Header            | Type   | Required | Description                              |
+|-------------------|--------|----------|------------------------------------------|
+| `Authorization`   | String | Yes      | A valid JWT token in the format `Bearer <token>`. |
+
+### Response
+
+#### Success (200 OK)
+```json
+{
+  "_id": "CAPTAIN_ID",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "johndoe@example.com",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Example Request
+```bash
+GET /captains/profile HTTP/1.1
+Authorization: Bearer JWT_TOKEN
+```
+
+### Example Response
+```json
+{
+  "_id": "64f1c2e4b5d6c2a1b8e4f123",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "johndoe@example.com",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+---
+
+## Endpoint: `/captains/logout`
+
+### Description
+This endpoint is used to log out the authenticated captain. It clears the JWT token from cookies and blacklists the token to prevent reuse.
+
+### Method
+`GET`
+
+### Headers
+| Header            | Type   | Required | Description                              |
+|-------------------|--------|----------|------------------------------------------|
+| `Authorization`   | String | Yes      | A valid JWT token in the format `Bearer <token>`. |
+
+### Response
+
+#### Success (200 OK)
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Example Request
+```bash
+GET /captains/logout HTTP/1.1
+Authorization: Bearer JWT_TOKEN
+```
+
+### Example Response
+```json
+{
+  "message": "Logged out successfully"
+}
+```
