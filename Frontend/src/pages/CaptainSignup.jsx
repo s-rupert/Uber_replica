@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import { Link } from "react-router-dom";
+import { CaptainDataContext } from "../context/CaptainContext";
 
 const CaptainSignup = () => {
   const [email, setEmail] = useState("");
@@ -7,6 +8,8 @@ const CaptainSignup = () => {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [userData, setUserData] = useState({});
+
+  const { captain, setCaptain } = useContext(CaptainDataContext);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -68,7 +71,7 @@ const CaptainSignup = () => {
             placeholder="Password"
           />
           <button className="bg-[#111] mb-7 text-white rounded px-4 py-2 w-full text-lg placeholder:text-base">
-            Login
+            Create Account
           </button>
         </form>
         <p className="text-center">
