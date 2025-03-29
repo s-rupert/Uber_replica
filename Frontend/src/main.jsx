@@ -9,13 +9,12 @@ import Home from "./pages/Home.jsx"
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    {/* <CaptainContext>
+    <CaptainContext>
       <UserContext>
         <BrowserRouter>
           <App />
         </BrowserRouter>
       </UserContext>
-    </CaptainContext> */}
-    <Home />
+    </CaptainContext>
   </StrictMode>
 );
