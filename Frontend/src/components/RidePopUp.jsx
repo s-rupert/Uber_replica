@@ -15,7 +15,7 @@ const RidePopUp = (props) => {
       <div className="flex items-center justify-between p-3 bg-yellow-400 rounded-lg">
         <div className="flex items-center gap-3 ">
           <img className="h-15 w-15 rounded-full object-cover" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPOsE1rgqrLOnT1NL_Q63ma2ZH8Y4seuk58g&s" alt="" />
-          <h2 className="text-lg fond-medium">Harsh Gujral</h2>
+          <h2 className="text-lg fond-medium">{props.ride?.user.fullname.firstname + " " + props.ride?.user.fullname.lastname}</h2>
         </div>
         <h5 className="text-lg font-semibold">2.2 KM</h5>
       </div>
@@ -26,7 +26,7 @@ const RidePopUp = (props) => {
             <div className="w-[80%]">
               <h3 className="text-lg font-medium">563/11-A</h3>
               <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
+                {props.ride?.pickup}
               </p>
             </div>
           </div>
@@ -35,14 +35,14 @@ const RidePopUp = (props) => {
             <div className="w-[80%]">
               <h3 className="text-lg font-medium">68B</h3>
               <p className="text-sm -mt-1 text-gray-600">
-                Rajnagar gorkha, Haryana
+                {props.ride?.destination}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-3">
             <i className="ri-currency-fill text-center w-[20%]"></i>
             <div className="w-[80%]">
-              <h3 className="text-lg font-medium">$27.85</h3>
+              <h3 className="text-lg font-medium">${props.ride?.fare}</h3>
               <p className="text-sm -mt-1 text-gray-600">Cash + Inc. tax</p>
             </div>
           </div>
@@ -60,6 +60,7 @@ const RidePopUp = (props) => {
             onClick={() => {
               props.setConfirmRidePopup(true);
               props.setRidePopupPanel(true);
+              props.confirmRide();
             }}
             className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-xl"
           >

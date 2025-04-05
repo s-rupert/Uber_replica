@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { validationResult } = require('express-validator');
+const captainModel = require('../models/captain.model');
 
 module.exports.getAddressCoordinate = async (address) => {
     const apiKey = process.env.GOOGLE_MAPS_API; // Ensure this is set in your environment variables
@@ -11,7 +12,7 @@ module.exports.getAddressCoordinate = async (address) => {
         if (response.data.status === 'OK') {
             const location = response.data.results[0].geometry.location;
             return {
-                lat: location.lat,
+                ltd: location.lat,
                 lng: location.lng
             };
         }else{
@@ -43,4 +44,35 @@ module.exports.getDistance = async (origin, destination) => {
         console.error(error);
         throw error;
     }
+}
+
+module.exports.getAutoCompleteSuggestions = async (input) => {
+    if (!input) {
+        throw new Error("query is required");
+    }
+    const apiKey = process.env.GOOGLE_MAPS_API;
+    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${apiKey}`;
+
+    try {
+        const response = await axios.get(url);
+        if (response.data.status === 'OK') {
+            return response.data.predictions;
+        } else {
+            throw new Error(`Unable to fetch autocomplete suggestions for the given input`);
+        }
+    }catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
+ const captains = await captainModel.find({
+    location: {
+        $geoWithin: {
+            $centerSphere: [[ltd,lng], radius / 6371]
+        }
+    }
+});
+return captains;
 }

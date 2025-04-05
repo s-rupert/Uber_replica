@@ -8,7 +8,6 @@ const UserSignup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
-//   const [userData, setUserData] = useState({});
 
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserDataContext);

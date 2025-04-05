@@ -1,18 +1,26 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { SocketContext } from "../context/SocketContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import LiveTracking from "../components/LiveTracking";
 
-const Riding = () => {
+const Riding = (props) => {
+  const location = useLocation();
+  const ride = location.state?.ride;
+  const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
+
+  socket.on("ride-ended", () => {
+    navigate("/home");
+  })
   return (
     <div className="h-screen">
         <Link to='/home' className="flex items-center justify-center rounded-full fixed h-10 w-10 bg-white right-2 top-2">
         <i className="text-lg font-bold ri-home-4-line"></i>
         </Link>
       <div className="h-1/2">
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:720/format:webp/0*gwMx05pqII5hbfmX.gif"
-          alt=""
-        />
+        <LiveTracking />
       </div>
       <div className="m-3">
         <div className="flex items-center justify-between mx-3 my-5">
@@ -27,8 +35,8 @@ const Riding = () => {
             alt=""
           />
           <div className="text-right">
-            <h2 className="text-lg font-medium">Rupesh</h2>
-            <h4 className="text-xl font-semi">JK 0357 L0</h4>
+            <h2 className="text-lg font-medium capitalize">{ride?.captain.fullname.firstname}</h2>
+            <h4 className="text-xl font-semi">{ride?.captain.vehicle.plate}</h4>
             <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
             <p className="text-xs">
               4.5 <i class="ri-star-half-line"></i>
@@ -40,14 +48,14 @@ const Riding = () => {
           <div className="w-[80%]">
             <h3 className="text-lg font-medium">68B</h3>
             <p className="text-sm -mt-1 text-gray-600">
-              Rajnagar gorkha, Haryana
+              {ride?.destination}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3 p-3">
           <i className="ri-currency-fill text-center w-[20%]"></i>
           <div className="w-[80%]">
-            <h3 className="text-lg font-medium">$27.85</h3>
+            <h3 className="text-lg font-medium">${ride?.fare}</h3>
             <p className="text-sm -mt-1 text-gray-600">Cash + Inc. tax</p>
           </div>
         </div>
