@@ -229,9 +229,9 @@ const Home = () => {
               submitHandler(e);
             }}
           >
-            <div className="ldot absolute h-2 w-2 top-1/2 bg-transparent top-[45%] left-10 border-2 rounded-full"></div>
-            <div className="line absolute h-10 w-1 top-1/2 bg-gray-900 top-[51%] left-10.5 rounded-full"></div>
-            <div className="ddot absolute h-2 w-2 top-1/2 bg-transparent top-[72%] left-10 border-2 "></div>
+            <div className="ldot absolute h-2 w-2 -mt-6 bg-transparent top-[45%] left-9 border-2 rounded-full"></div>
+            <div className="line absolute h-8 w-1 -mt-6 bg-gray-900 top-[51%] left-9.5 rounded-full"></div>
+            <div className="ddot absolute h-2 w-2 -mt-10 bg-transparent top-[72%] left-9 border-2 "></div>
             <input
               onClick={() => {
                 setPanelOpen(true);

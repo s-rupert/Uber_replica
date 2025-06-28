@@ -5,10 +5,10 @@ const captainModel = require('../models/captain.model');
 module.exports.getAddressCoordinate = async (address) => {
     const apiKey = process.env.GOOGLE_MAPS_API; // Ensure this is set in your environment variables
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
-    
+    console.log('Fetching coordinates for address:', address);
     try { 
         const response = await axios.get(url);
-        
+        console.log('Google Maps API response:', response.data);
         if (response.data.status === 'OK') {
             const location = response.data.results[0].geometry.location;
             return {
