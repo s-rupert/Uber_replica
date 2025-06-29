@@ -1,0 +1,48 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on pushes to the 'main' branch (you can change this)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # This specifies the OS to run the workflow on (Ubuntu in this case)
+
+    steps:
+      # Step 1: Checkout code from GitHub repository
+      - name: Checkout code
+        uses: actions/checkout@v2  # This action checks out the repository's code
+
+      # Step 2: Set up SSH key for connecting to the server
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh  # Create the .ssh directory if it doesn't exist
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa  # Put the private SSH key from GitHub Secrets
+          chmod 600 ~/.ssh/id_rsa  # Secure the private key with the right permissions
+
+      # Step 3: Add the server to the known hosts list (to avoid SSH authenticity prompt)
+      - name: Add server to known hosts
+        run: |
+          ssh-keyscan -H 147.93.46.172 >> ~/.ssh/known_hosts  # This avoids the prompt about server authenticity
+
+      # Step 4: Test SSH connection (no deployment yet)
+      - name: Test SSH Connection to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no root@147.93.46.172 "echo 'SSH connection successful!'"  # Test SSH connection without authenticity prompt
+          
+      # Step 5: Deploy code (uncomment this after SSH test is successful)
+      - name: Deploy to Server
+        run: |
+          ssh root@147.93.46.172 << 'EOF'
+            cd /root/Uber_replica || { echo "Failed to cd into /root/TANDOORI-HAVEN"; exit 1; }
+            git pull origin main || { echo "Git pull failed"; exit 1; }
+            cd Frontend || { echo "Failed to cd into frontend"; exit 1; }
+            npm i || { echo "npm install failed in frontend"; exit 1; }
+            npm run build || { echo "Build failed"; exit 1; }
+            rm -rf /var/www/uber/dist || { echo "Failed to remove old dist"; exit 1; }
+            mv dist/ /var/www/uber || { echo "Failed to move dist"; exit 1; }
+            cd /root/Uber_replica/backend || { echo "Failed to cd into backend"; exit 1; }
+            npm i || { echo "npm install failed in backend"; exit 1; }
+            pm2 restart all || { echo "pm2 restart failed"; exit 1; }
+          EOF
